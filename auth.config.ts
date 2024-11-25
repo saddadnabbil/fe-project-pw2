@@ -7,13 +7,13 @@ const authConfig = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? '',
-      clientSecret: process.env.GITHUB_SECRET ?? '',
+      clientSecret: process.env.GITHUB_SECRET ?? ''
     }),
     CredentialProvider({
       name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials, req) {
         try {
@@ -22,8 +22,8 @@ const authConfig = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               email: credentials?.email,
-              password: credentials?.password,
-            }),
+              password: credentials?.password
+            })
           });
 
           const result = await response.json();
@@ -33,8 +33,9 @@ const authConfig = {
             return {
               id: result.data.user.id,
               name: result.data.user.name,
+
               email: result.data.user.email,
-              token: result.data.token, // Include the token if needed
+              token: result.data.token // Include the token if needed
             };
           } else {
             // Returning null indicates failure
@@ -43,20 +44,21 @@ const authConfig = {
         } catch (error) {
           throw new Error('Failed to authenticate. Please try again.');
         }
-      },
-    }),
+      }
+    })
   ],
   pages: {
-    signIn: '/', // Specify your sign-in page
+    signIn: '/' // Specify your sign-in page
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt'
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id!;
         token.name = user.name || '';
+        token.image = user.image || '';
         token.email = user.email || '';
         token.token = user.token || '';
         token.emailVerified = null; // Explicitly set as null or map it from your user data
@@ -67,15 +69,14 @@ const authConfig = {
       session.user = {
         id: token.id,
         name: token.name || '',
+        image: token.image || '',
         email: token.email || '',
         token: token.token || '',
-        emailVerified: token.emailVerified ?? null, // Map as Date | null
+        emailVerified: token.emailVerified ?? null // Map as Date | null
       };
       return session;
-    },
-  },
-  
-  
+    }
+  }
 } satisfies NextAuthConfig;
 
 export default authConfig;

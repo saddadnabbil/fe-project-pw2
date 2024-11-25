@@ -6,14 +6,14 @@ import { CellAction } from './cell-action';
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: 'photo_url',
+    accessorKey: 'image',
     header: 'IMAGE',
     cell: ({ row }) => {
       return (
         <div className="relative aspect-square">
           <Image
-            src={row.getValue('photo_url')}
-            alt={row.getValue('name')}
+            src={row.getValue('image')}
+            alt={row.getValue('name') || 'Unknown'}
             fill
             className="rounded-lg"
           />
@@ -23,21 +23,33 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'NAME'
+    header: 'NAME',
+    cell: ({ row }) => row.getValue('name') || 'Unknown'
   },
   {
-    accessorKey: 'category',
-    header: 'CATEGORY'
+    accessorKey: 'code',
+    header: 'CODE'
+  },
+  {
+    accessorKey: 'categoryName',
+    header: 'CATEGORY',
+    cell: ({ row }) => row.getValue('categoryName') || 'Unknown'
+  },
+  {
+    accessorKey: 'supplierName',
+    header: 'SUPPLIER',
+    cell: ({ row }) => row.getValue('supplierName') || 'Unknown'
   },
   {
     accessorKey: 'price',
-    header: 'PRICE'
+    header: 'PRICE',
+    cell: ({ row }) =>
+      `Rp ${parseFloat(row.getValue('price')).toLocaleString('id-ID')}`
   },
   {
-    accessorKey: 'description',
-    header: 'DESCRIPTION'
+    accessorKey: 'stock',
+    header: 'STOCK'
   },
-
   {
     id: 'actions',
     cell: ({ row }) => <CellAction data={row.original} />

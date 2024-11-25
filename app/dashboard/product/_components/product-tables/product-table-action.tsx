@@ -3,10 +3,7 @@
 import { DataTableFilterBox } from '@/components/ui/table/data-table-filter-box';
 import { DataTableResetFilter } from '@/components/ui/table/data-table-reset-filter';
 import { DataTableSearch } from '@/components/ui/table/data-table-search';
-import {
-  CATEGORY_OPTIONS,
-  useProductTableFilters
-} from './use-product-table-filters';
+import { useProductTableFilters } from './use-product-table-filters';
 
 export default function ProductTableAction() {
   const {
@@ -16,8 +13,10 @@ export default function ProductTableAction() {
     resetFilters,
     searchQuery,
     setPage,
-    setSearchQuery
+    setSearchQuery,
+    categoryOptions
   } = useProductTableFilters();
+
   return (
     <div className="flex flex-wrap items-center gap-4">
       <DataTableSearch
@@ -29,7 +28,7 @@ export default function ProductTableAction() {
       <DataTableFilterBox
         filterKey="categories"
         title="Categories"
-        options={CATEGORY_OPTIONS}
+        options={categoryOptions}
         setFilterValue={setCategoriesFilter}
         filterValue={categoriesFilter}
       />

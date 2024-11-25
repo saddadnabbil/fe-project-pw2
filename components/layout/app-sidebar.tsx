@@ -30,6 +30,7 @@ import {
   SidebarRail
 } from '@/components/ui/sidebar';
 import { navItems } from '@/constants/data';
+import { signOut, useSession } from 'next-auth/react';
 import {
   BadgeCheck,
   Bell,
@@ -39,14 +40,13 @@ import {
   GalleryVerticalEnd,
   LogOut
 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
 
 export const company = {
-  name: 'Acme Inc',
+  name: 'Sales System',
   logo: GalleryVerticalEnd,
   plan: 'Enterprise'
 };
@@ -188,22 +188,7 @@ export default function AppSidebar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <BadgeCheck />
-                    Account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard />
-                    Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell />
-                    Notifications
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>
                   <LogOut />
                   Log out
                 </DropdownMenuItem>

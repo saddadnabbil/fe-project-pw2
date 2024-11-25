@@ -3,22 +3,13 @@
 import { searchParams } from '@/lib/searchparams';
 import { useQueryState } from 'nuqs';
 import { useCallback, useMemo } from 'react';
+import { useCategoryOptions } from '../hooks/useCategoryOptions';
 
-export const CATEGORY_OPTIONS = [
-  { value: 'Electronics', label: 'Electronics' },
-  { value: 'Furniture', label: 'Furniture' },
-  { value: 'Clothing', label: 'Clothing' },
-  { value: 'Toys', label: 'Toys' },
-  { value: 'Groceries', label: 'Groceries' },
-  { value: 'Books', label: 'Books' },
-  { value: 'Jewelry', label: 'Jewelry' },
-  { value: 'Beauty Products', label: 'Beauty Products' }
-];
 export function useProductTableFilters() {
   const [searchQuery, setSearchQuery] = useQueryState(
     'q',
     searchParams.q
-      .withOptions({ shallow: false, throttleMs: 1000 })
+      .withOptions({ shallow: false, throttleMs: 500 }) // Kurangi throttle untuk lebih responsif
       .withDefault('')
   );
 
@@ -35,13 +26,14 @@ export function useProductTableFilters() {
   const resetFilters = useCallback(() => {
     setSearchQuery(null);
     setCategoriesFilter(null);
-
     setPage(1);
   }, [setSearchQuery, setCategoriesFilter, setPage]);
 
   const isAnyFilterActive = useMemo(() => {
     return !!searchQuery || !!categoriesFilter;
   }, [searchQuery, categoriesFilter]);
+
+  const categoryOptions = useCategoryOptions(); // Menggunakan kategori dari API
 
   return {
     searchQuery,
@@ -51,6 +43,7 @@ export function useProductTableFilters() {
     resetFilters,
     isAnyFilterActive,
     categoriesFilter,
-    setCategoriesFilter
+    setCategoriesFilter,
+    categoryOptions
   };
 }

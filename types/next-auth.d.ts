@@ -10,6 +10,7 @@ declare module 'next-auth' {
       name: string;
       email: string;
       token: string; // Include token for API calls
+      image: string;
       emailVerified?: Date | null; // Match `AdapterUser`'s expected type
     };
   }
@@ -31,6 +32,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     name: string;
+    image: string;
     email: string;
     token: string;
     emailVerified?: Date | null; // Match `AdapterUser`'s expected type

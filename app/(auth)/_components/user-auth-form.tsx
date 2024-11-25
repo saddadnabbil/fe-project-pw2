@@ -4,20 +4,23 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import * as z from 'zod';
+import { useState } from 'react'; // Import useState for managing loading state
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters' })
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -27,16 +30,23 @@ export default function UserAuthForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: 'admin@example.com',
-      password: 'password123',
-    },
+      password: 'password123'
+    }
   });
 
+  // Add loading state
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data: UserFormValue) => {
+    setLoading(true); // Start loading animation
+
     const result = await signIn('credentials', {
       redirect: false,
       email: data.email,
-      password: data.password,
+      password: data.password
     });
+
+    setLoading(false); // Stop loading animation
 
     if (result?.error) {
       toast.error(result.error);
@@ -48,10 +58,7 @@ export default function UserAuthForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full space-y-2"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
         <FormField
           control={form.control}
           name="email"
@@ -86,8 +93,16 @@ export default function UserAuthForm() {
             </FormItem>
           )}
         />
-        <Button className="ml-auto w-full" type="submit">
-          Log In
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          disabled={loading} // Disable the button when loading
+        >
+          {loading ? (
+            <span className="loader"></span> // Add a loading spinner here
+          ) : (
+            'Log In'
+          )}
         </Button>
       </form>
     </Form>
